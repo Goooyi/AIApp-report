@@ -15,7 +15,7 @@ print(PH_API_KEY)
 headers = {
 'Accept': 'application/json',
 'Content-Type': 'application/json',
-'Authorization': 'Bearer _BRJX-2mPl3MVf5iPb1rWZGY6aKqZJTQAgWk0_T0ZIU',
+'Authorization': 'Bearer **',
 'Host': 'api.producthunt.com'
 }
 
