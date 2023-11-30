@@ -5,6 +5,7 @@
 import os
 import json
 import requests
+import httpx
 
 PH_API_KEY = os.environ.get("PH_API_KEY")
 PH_API_SECRET = os.environ.get("PH_API_SECRET")
@@ -14,48 +15,25 @@ print(PH_API_KEY)
 headers = {
 'Accept': 'application/json',
 'Content-Type': 'application/json',
-'Authorization': 'Bearer ' + PH_DEV_TOKEN,
+'Authorization': 'Bearer _BRJX-2mPl3MVf5iPb1rWZGY6aKqZJTQAgWk0_T0ZIU',
 'Host': 'api.producthunt.com'
 }
 
+# headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'}
+
 def run_query(query): # A simple function to use requests.post to make the API call. Note the json= section.
-    request = requests.post('https://api.producthunt.com/v2/api/graphql', data=json.dumps(query), headers=headers)
+    request = httpx.post('https://api.producthunt.com/v2/api/graphql', data=json.dumps(query), headers=headers)
     if request.status_code == 200:
         return request.json()
     else:
-        raise Exception("Query failed to run by returning code of {}. {}".format(request.status_code, query))
+        raise Exception("Query failed to run by returning code {}.".format(request.status_code))
 
 
 # The GraphQL query (with a few aditional bits included) itself defined as a multi-line string.
-query = {"query":
-        """
-        query todayPosts {
-            posts {
-                totalCount
-                edges {
-                    node {
-                        id
-                        name
-                        tagline
-                        votesCount
-                        featuredAt
-                        makers {
-                            name
-                            followers {
-                                totalCount
-                            }
-                            following {
-                                totalCount
-                            }
-                            madePosts {
-                                totalCount
-                            }
-                            twitterUsername
-                        }
-                    }
-                }
-            }
-        }
-        """}
+query ={
+  "query": "query { posts(first: 1) { edges { node { id, name } } } }"
+}
+
+print(headers)
 result = run_query(query) # Execute the query
 print(result)
